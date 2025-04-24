@@ -2,8 +2,6 @@ return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		-- Automatically install LSPs and related tools to stdpath for Neovim
-		-- Mason must be loaded before its dependents so we need to set it up here.
 		-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
 		{ "williamboman/mason.nvim", opts = {} },
 		"williamboman/mason-lspconfig.nvim",
@@ -16,43 +14,9 @@ return {
 		"saghen/blink.cmp",
 	},
 	config = function()
-		-- Brief aside: **What is LSP?**
-		--
-		-- LSP is an initialism you've probably heard, but might not understand what it is.
-		--
-		-- LSP stands for Language Server Protocol. It's a protocol that helps editors
-		-- and language tooling communicate in a standardized fashion.
-		--
-		-- In general, you have a "server" which is some tool built to understand a particular
-		-- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-		-- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-		-- processes that communicate with some "client" - in this case, Neovim!
-		--
-		-- LSP provides Neovim with features like:
-		--  - Go to definition
-		--  - Find references
-		--  - Autocompletion
-		--  - Symbol Search
-		--  - and more!
-		--
-		-- Thus, Language Servers are external tools that must be installed separately from
-		-- Neovim. This is where `mason` and related plugins come into play.
-		--
-		-- If you're wondering about lsp vs treesitter, you can check out the wonderfully
-		-- and elegantly composed help section, `:help lsp-vs-treesitter`
-
-		--  This function gets run when an LSP attaches to a particular buffer.
-		--    That is to say, every time a new file is opened that is associated with
-		--    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-		--    function will be executed to configure the current buffer
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
-				-- NOTE: Remember that Lua is a real programming language, and as such it is possible
-				-- to define small helper and utility functions so you don't have to repeat yourself.
-				--
-				-- In this case, we create a function that lets us more easily define mappings specific
-				-- for LSP related items. It sets the mode, buffer and description for us each time.
 				local map = function(keys, func, desc, mode)
 					mode = mode or "n"
 					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
@@ -206,8 +170,44 @@ return {
 		local servers = {
 			-- clangd = {},
 			-- gopls = {},
-			-- pyright = {},
-			-- rust_analyzer = {},
+			-- mojo = {
+			-- 	default_config = {
+			-- 		cmd = { "mojo-lsp-server" },
+			-- 		filetypes = { "mojo" },
+			-- 		root_dir = function(fname)
+			-- 			return vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
+			-- 		end,
+			-- 		single_file_support = true,
+			-- 	},
+			-- 	docs = {
+			-- 		description = [[
+			-- 			https://github.com/modularml/mojo
+			--
+			-- 			`mojo-lsp-server` can be installed [via Modular](https://developer.modular.com/download)
+			--
+			-- 			Mojo is a new programming language that bridges the gap between research and production by combining Python syntax and ecosystem with systems programming and metaprogramming features.
+			-- 			]],
+			-- 	},
+			-- },
+			basedpyright = {
+				settings = {
+					python = {
+						analysis = {
+							extraPaths = { vim.fn.expand("$HOME/.rye/shims") },
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+						},
+					},
+				},
+				before_init = function(_, config)
+					-- Try to find and use the Rye environment's Python
+					local rye_path = vim.fn.getcwd() .. "/.venv/bin/python"
+					if vim.fn.filereadable(rye_path) == 1 then
+						config.settings.python.pythonPath = rye_path
+					end
+				end,
+			},
+			rust_analyzer = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
 			-- Some languages (like typescript) have entire language plugins that can be useful:
