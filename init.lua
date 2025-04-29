@@ -30,7 +30,6 @@ require("lazy").setup({
 	require("plugins.misc"),
 	require("plugins.neotree"),
 	require("plugins.noice"),
-	require("plugins.remote-nvim"),
 	require("plugins.rustacean"),
 	require("plugins.surround"),
 	require("plugins.telescope"),
