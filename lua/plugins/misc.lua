@@ -1,6 +1,10 @@
 -- Standalone plugins with less than 10 lines of config go here
 return {
 	{
+		-- ty type checker
+		"aekasitt/tylsp.nvim",
+	},
+	{
 		-- Tmux & split window navigation
 		"christoomey/vim-tmux-navigator",
 	},
@@ -55,11 +59,45 @@ return {
 		},
 	},
 	{
-		"zbirenbaum/copilot.lua",
-		event = "InsertEnter",
-		cmd = "Copilot",
+		"atiladefreitas/dooing",
 		config = function()
-			require("copilot").setup({})
+			require("dooing").setup({})
 		end,
+	},
+	{
+		"mluders/comfy-line-numbers.nvim",
+		config = function()
+			require("comfy-line-numbers").setup()
+		end,
+	},
+	{
+		"code-biscuits/nvim-biscuits",
+		opts = {
+			show_on_start = true,
+		},
+		keys = {
+			{
+				"<leader>bb",
+				function()
+					require("nvim-biscuits").BufferAttach()
+				end,
+				mode = "n",
+				desc = "Enable Biscuits",
+			},
+			{
+				"<leader>bt",
+				function()
+					require("nvim-biscuits").toggle_biscuits()
+				end,
+				mode = "n",
+				desc = "Toggle Biscuits Visibility",
+			},
+		},
+	},
+	{
+		"GCBallesteros/jupytext.nvim",
+		config = true,
+		-- Depending on your nvim distro or config you may need to make the loading not lazy
+		-- lazy=false,
 	},
 }

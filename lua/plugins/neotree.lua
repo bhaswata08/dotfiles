@@ -160,13 +160,37 @@ return {
 			-- see `:h neo-tree-custom-commands-global`
 			commands = {},
 			window = {
-				position = "right",
+				position = "left",
 				width = 40,
 				mapping_options = {
 					noremap = true,
 					nowait = true,
 				},
 				mappings = {
+					["Y"] = {
+						function(state)
+							local node = state.tree:get_node()
+							vim.fn.setreg("+", node.path, "c")
+						end,
+						desc = "Copy Absolute Path to Clipboard",
+					},
+					["gy"] = {
+						function(state)
+							local node = state.tree:get_node()
+							local rel_path = vim.fn.fnamemodify(node.path, ":.")
+							vim.fn.setreg("+", rel_path, "c")
+						end,
+						desc = "Copy Relative Path to Clipboard",
+					},
+					["y"] = {
+						function(state)
+							local node = state.tree:get_node()
+							local rel_path = vim.fn.fnamemodify(node.path, ":.")
+							local dotted_path = "./" .. rel_path
+							vim.fn.setreg("+", dotted_path, "c")
+						end,
+						desc = "Copy Relative Path with Leading Dot to Clipboard",
+					},
 					["<space>"] = {
 						"toggle_node",
 						nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
@@ -202,7 +226,7 @@ return {
 					["d"] = "delete",
 					["r"] = "rename",
 					["b"] = "rename_basename",
-					["y"] = "copy_to_clipboard",
+					-- ["y"] = "copy_to_clipboard",
 					["x"] = "cut_to_clipboard",
 					["p"] = "paste_from_clipboard",
 					["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
@@ -366,6 +390,6 @@ return {
 			},
 		})
 		vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
-		vim.keymap.set("n", "<leader>e", ":Neotree toggle position=right<CR>", { noremap = true, silent = true })
+		vim.keymap.set("n", "<leader>e", ":Neotree toggle position=left<CR>", { noremap = true, silent = true })
 	end,
 }

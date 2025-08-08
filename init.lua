@@ -1,5 +1,6 @@
 require("core.options")
 require("core.keymaps")
+require("core.custom")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -20,7 +21,6 @@ require("lazy").setup({
 	require("plugins.comment"),
 	require("plugins.flash"),
 	require("plugins.gitsigns"),
-	require("plugins.greeter"),
 	require("plugins.hardtime"),
 	require("plugins.indent-blankline"),
 	require("plugins.lsp"),
@@ -30,10 +30,13 @@ require("lazy").setup({
 	require("plugins.misc"),
 	require("plugins.neotree"),
 	require("plugins.noice"),
+	require("plugins.notebook"),
+	require("plugins.remote-nvim"),
 	require("plugins.rustacean"),
-	require("plugins.surround"),
+	require("plugins.snacks"),
 	require("plugins.telescope"),
 	require("plugins.todo-comments"),
 	require("plugins.treesitter"),
 	require("plugins.wilder"),
+	require("plugins.yazi"),
 })
