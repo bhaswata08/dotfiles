@@ -1,0 +1,6 @@
+[submodule "hydenix"]
+	path = hydenix
+	url = https://github.com/bhaswata08/hydenix-bhaswata
+[submodule "nvim"]
+	path = nvim
+	url = https://github.com/bhaswata08/nvim.git
