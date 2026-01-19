@@ -1,0 +1,9 @@
+alias cd = z
+alias cdi = zi
+alias ls = eza --icons --grid
+alias ll = eza -l --icons --git
+alias c = clear
+alias grep = rg
+alias find = fd
+alias du = dust
+alias nv = nvim
